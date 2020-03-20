@@ -73,7 +73,7 @@ gen rtr = 100 * ((ptr/ptr[_n-1])-1)
 
 
 *----------------------------------------------------------
-* Return distribution (10 days) 
+* Return distribution (20 days) 
 *----------------------------------------------------------
 
 local lastdate = td_string[_N]
@@ -155,7 +155,7 @@ graph export "vix as hedge.png", replace
 
 
 *----------------------------------------------------------
-* Daily return time series 
+* Daily return time series scatter
 *----------------------------------------------------------
 
 
@@ -165,11 +165,6 @@ local lastdate = td_string[_N]
 
 global MONTHS "12"
 global WINLIMIT "3"
-
-cap drop rtr_win
-clonevar rtr_win = rtr
-replace  rtr_win = -${WINLIMIT}.01 if rtr < -${WINLIMIT} & ~missing(rtr)
-replace  rtr_win = +${WINLIMIT}.01 if rtr > +${WINLIMIT} & ~missing(rtr)
 
 //
 scatter rtr daten if (tm[_N]-tm < ${MONTHS}), ///
@@ -184,6 +179,14 @@ graph export "daily return ts.png", replace
 *----------------------------------------------------------
 * Daily return histograms 
 *----------------------------------------------------------
+
+global MONTHS "12"
+global WINLIMIT "3"
+
+cap drop rtr_win
+clonevar rtr_win = rtr
+replace  rtr_win = -${WINLIMIT}.01 if rtr < -${WINLIMIT} & ~missing(rtr)
+replace  rtr_win = +${WINLIMIT}.01 if rtr > +${WINLIMIT} & ~missing(rtr)
 
 /*
 //
@@ -222,4 +225,3 @@ graph export "daily return histograms.png", replace
 
 compress
 save sp500data.dta, replace
-
